@@ -1,0 +1,49 @@
+<h1>Actor #<%= @the_id %> details</h1>
+<a href = "/actors">Go back</a>
+<hr>
+
+<dl>
+  <dt> Name </dt>
+  <dd> <%= @name %> </dd>
+  <dt> Dob </dt>
+  <dd> <%= @dob %> </dd>
+  <dt> Bio </dt>
+  <dd> <%= @bio %> </dd>
+  <dt> Image </dt>
+  <dd> <img src="<%= @image %>" width="250"> </dd>
+  <dt> Created at </dt>
+  <dd> <%= @created_at %> </dd>
+  <dt> Updated at </dt>
+  <dd> <%= @updated_at %> </dd>
+</dl>
+
+<hr>
+<h2>Filmography</h2>
+<% matching_character = Character.where({ :actor_id => @the_id}) %>
+<% character_id = matching_character.at(0) %>
+
+<table border="1">
+  <tr>
+    <th> ID </th>
+    <th> Title </th>
+    <th> Year </th>
+    <th> Director </th>
+    <th> Character </th>
+    <th> </th>
+  </tr>
+
+  <% matching_character.each do |char| %>
+  <tr>
+      <% matching_movie = Movie.where({ :id => char.movie_id }) %>
+      <% movie_match = matching_movie.at(0) %>
+      <td><%= movie_match.id %></td>
+      <td><%= movie_match.title %></td>
+      <td><%= movie_match.year %></td>
+      <% matching_director = Director.where({ :id => movie_match.director_id }) %>
+      <% director_match = matching_director.at(0) %>
+      <td><%= director_match.name %></td>
+      <td><%= char.name %></td>
+      <td> <a href="/movies/<%= movie_match.id %>">Show details</a></td>
+    </tr>
+  <% end %>
+</table>
